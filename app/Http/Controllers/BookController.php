@@ -13,6 +13,8 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
+
+        //This would be us for filtering
         $title = $request->input('title');
 
         $books = Book::when($title, 
