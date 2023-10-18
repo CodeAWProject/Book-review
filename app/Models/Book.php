@@ -46,4 +46,33 @@ class Book extends Model
             $query->whereBetween('created_at', [$from, $to]);
         }
     }
+
+    // We get  all the books that are most reviews from the last month until now. also it will return the average ratings and only the books that got at least two reviews
+    public function scopePopularLastMonth(Builder $query): Builder|QueryBuilder {
+        return $query->popular(now()->subMonth(), now())
+            ->highestRated(now()->subMonth(), now())
+            ->minReviews(2);
+    }
+
+    // We get  all the books that are most reviews from the 6 last months until now. also it will return the average ratings and only the books that got at least five reviews
+    public function scopePopularLast6Month(Builder $query): Builder|QueryBuilder {
+        return $query->popular(now()->subMonths(6), now())
+            ->highestRated(now()->subMonths(6), now())
+            ->minReviews(5);
+    }
+
+    //The average rating and the amount of ratings from last month
+    public function scopeHighestRatedLastMonth(Builder $query): Builder|QueryBuilder {
+        return $query->highestRated(now()->subMonth(), now())
+            ->popular(now()->subMonth(), now())     
+            ->minReviews(2);
+    }
+
+    //from last 6 months
+    public function scopeHighestRatedLast6Month(Builder $query): Builder|QueryBuilder {
+        return $query->highestRated(now()->subMonths(6), now())
+            ->popular(now()->subMonths(), now())     
+            ->minReviews(5);
+    }
+    
 }
