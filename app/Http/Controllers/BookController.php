@@ -58,7 +58,15 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return view('books.show', ['book' => $book]);
+
+        //Load function get acces to connected model with relationship
+        // All the reviews on the book page would be sorted by the most recent
+        return view(
+            'books.show',
+            ['book' => $book->load([
+                'reviews' => fn ($query) => $query->latest()
+            ])]
+        );
     }
 
     /**
