@@ -16,11 +16,23 @@ class BookController extends Controller
 
         //This would be us for filtering
         $title = $request->input('title');
+        $filter = $request->input('filter', '');
 
         $books = Book::when($title, 
         fn ($query, $title) => $query->title($title)
-             
-        )->get();
+        );
+
+
+        $books = match($filter) {
+            'popular_last_month' => $books->popularLastMonth(),
+            'popular_last_6month' => $books->popularLast6Months(),
+            'highest_rated_last_month' => $books->highestRatedLastMonth(),
+            'highest_rated_last_6month' => $books->highestRatedLast6Months(),
+
+            default => $books->latest()
+        };
+
+        $books = $books->get();
 
         return view('books.index', ['books' => $books]);
     }

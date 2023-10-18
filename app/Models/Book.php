@@ -55,7 +55,7 @@ class Book extends Model
     }
 
     // We get  all the books that are most reviews from the 6 last months until now. also it will return the average ratings and only the books that got at least five reviews
-    public function scopePopularLast6Month(Builder $query): Builder|QueryBuilder {
+    public function scopePopularLast6Months(Builder $query): Builder|QueryBuilder {
         return $query->popular(now()->subMonths(6), now())
             ->highestRated(now()->subMonths(6), now())
             ->minReviews(5);
@@ -69,9 +69,9 @@ class Book extends Model
     }
 
     //from last 6 months
-    public function scopeHighestRatedLast6Month(Builder $query): Builder|QueryBuilder {
+    public function scopeHighestRatedLast6Months(Builder $query): Builder|QueryBuilder {
         return $query->highestRated(now()->subMonths(6), now())
-            ->popular(now()->subMonths(), now())     
+            ->popular(now()->subMonths(6), now())     
             ->minReviews(5);
     }
     

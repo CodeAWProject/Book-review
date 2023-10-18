@@ -18,7 +18,7 @@
                 'popular_last_month' => 'Popular Last Mounth',
                 'popular_last_6month' => 'Popular Last 6 Mounth',
                 'highest_rated_last_month' => 'Highest Rated Last Mounth',
-                'highest_rated_last_6month' => 'Highest Rated Last 6 Mounth',
+                'highest_rated_last_6month' => 'Highest Rated Last 6 Mounth'
 
             ];
         @endphp
