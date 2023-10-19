@@ -19,18 +19,29 @@ class Book extends Model
         return $query->where('title', 'LIKE', '%' . $title . '%');
     } 
 
-    public function scopePopular(Builder $query, $from = null, $to = null):Builder|QueryBuilder {
 
+      //Without sorting
+    public function scopeWithReviewsCount(Builder $query, $from = null, $to = null):Builder|QueryBuilder {
         return $query->withCount([
             'reviews' => fn (Builder $q) => $this->dateRangeFilter($q, $from, $to)
-        ])
-            ->orderBy('reviews_count', 'desc');
+        ]);
+    }
+
+
+    //Without sorting
+    public function scopeWithAvgRating(Builder $query, $from = null, $to = null):Builder|QueryBuilder {
+        return $query->withAvg([
+            'reviews' => fn (Builder $q) => $this->dateRangeFilter($q, $from, $to)
+        ], 'rating');
+    }
+
+    public function scopePopular(Builder $query, $from = null, $to = null):Builder|QueryBuilder {
+
+        return $query->withReviewsCount()->orderBy('reviews_count', 'desc');
     }
 
     public function scopeHighestRated(Builder $query, $from = null, $to = null):Builder|QueryBuilder {
-        return $query->withAvg([
-            'reviews' => fn (Builder $q) => $this->dateRangeFilter($q, $from, $to)
-        ], 'rating')->orderBy('reviews_avg_rating', 'desc');
+        return $query->withAvgRating()->orderBy('reviews_avg_rating', 'desc');
     }
 
     public function scopeMinReviews(Builder $query, int $minReviews): Builder|QueryBuilder {
