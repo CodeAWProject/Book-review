@@ -64,12 +64,16 @@ class BookController extends Controller
 
         //Load function get acces to connected model with relationship
         // All the reviews on the book page would be sorted by the most recent
-        return view(
-            'books.show',
-            ['book' => $book->load([
-                'reviews' => fn ($query) => $query->latest()
-            ])]
-        );
+
+        $cacheKey = 'book:' . $book->id;
+
+        //Casching reviews
+
+        $book = cache()->remember($cacheKey, 3600, fn() => $book->load([
+            'reviews' => fn ($query) => $query->latest()
+        ]));
+
+        return view('books.show',['book' => $book]);
     }
 
     /**
