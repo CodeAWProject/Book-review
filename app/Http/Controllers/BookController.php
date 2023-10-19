@@ -20,7 +20,8 @@ class BookController extends Controller
 
         $books = Book::when($title, 
         fn ($query, $title) => $query->title($title)
-        );
+    );
+
 
 
         $books = match($filter) {
@@ -29,13 +30,18 @@ class BookController extends Controller
             'highest_rated_last_month' => $books->highestRatedLastMonth(),
             'highest_rated_last_6month' => $books->highestRatedLast6Months(),
 
-            default => $books->latest()
+            default => $books->latest()->withAvgRating()->withReviewsCount()
         };
 
         //$books = $books->get();
 
         $cacheKey = 'books:' . $filter . ':' . $title;
-        $books = cache()->remember($cacheKey, 3600, fn() => $books->get());
+        $books = 
+            cache()->remember(
+            $cacheKey, 
+            3600, 
+            fn() =>
+            $books->get());
 
         return view('books.index', ['books' => $books]);
     }
