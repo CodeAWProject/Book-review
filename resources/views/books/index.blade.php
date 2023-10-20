@@ -15,10 +15,10 @@
         @php
             $filters = [
                 '' => 'Latest',
-                'popular_last_month' => 'Popular Last Mounth',
-                'popular_last_6month' => 'Popular Last 6 Mounth',
-                'highest_rated_last_month' => 'Highest Rated Last Mounth',
-                'highest_rated_last_6month' => 'Highest Rated Last 6 Mounth'
+                'popular_last_month' => 'Popular Last Month',
+                'popular_last_6months' => 'Popular Last 6 Months',
+                'highest_rated_last_month' => 'Highest Rated Last Month',
+                'highest_rated_last_6months' => 'Highest Rated Last 6 Months'
 
             ];
         @endphp
@@ -44,7 +44,7 @@
                 </div>
                 <div>
                   <div class="book-rating">
-                    {{ number_format($book->reviews_avg_rating, 1) }}
+                    <x-star-rating :rating="$book->reviews_avg_rating" />
                   </div>
                   <div class="book-review-count">
                     {{-- Plural function to display review or reviews based of the amount --}}
@@ -64,5 +64,11 @@
             </div>
           </li>
         @endforelse
+
+          {{-- <div>
+            {{ $books->links() }}
+          </div> --}}
+       
+        
     </ul>
 @endsection

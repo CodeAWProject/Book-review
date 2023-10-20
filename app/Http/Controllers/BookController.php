@@ -18,6 +18,8 @@ class BookController extends Controller
         $title = $request->input('title');
         $filter = $request->input('filter', '');
 
+        $perPage = 10;
+
         $books = Book::when($title, 
         fn ($query, $title) => $query->title($title)
     );
@@ -26,14 +28,14 @@ class BookController extends Controller
 
         $books = match($filter) {
             'popular_last_month' => $books->popularLastMonth(),
-            'popular_last_6month' => $books->popularLast6Months(),
+            'popular_last_6months' => $books->popularLast6Months(),
             'highest_rated_last_month' => $books->highestRatedLastMonth(),
-            'highest_rated_last_6month' => $books->highestRatedLast6Months(),
+            'highest_rated_last_6months' => $books->highestRatedLast6Months(),
 
             default => $books->latest()->withAvgRating()->withReviewsCount()
         };
 
-        //$books = $books->get();
+        //$books = $books->paginate(10);
 
         $cacheKey = 'books:' . $filter . ':' . $title;
         $books = 
